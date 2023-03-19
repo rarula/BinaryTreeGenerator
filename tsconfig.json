@@ -5,6 +5,7 @@
         ],
         "module": "CommonJS",
         "target": "ES2021",
+        "jsx": "react",
         "strict": true,
         "esModuleInterop": true,
         "resolveJsonModule": true,
@@ -13,10 +14,9 @@
         "noImplicitOverride": true,
         "baseUrl": ".",
         "outDir": "./dist",
-        "sourceMap": true,
-        "declaration": false
+        "sourceMap": true
     },
     "include": [
-        "src/**/*.ts"
+        "src"
     ]
 }
