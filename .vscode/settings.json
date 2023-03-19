@@ -2,5 +2,23 @@
     "search.exclude": {
         "**/node_modules": true,
         "**/dist": true
+    },
+    "[json]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "dprint.dprint"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     }
 }

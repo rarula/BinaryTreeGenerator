@@ -1,6 +1,7 @@
 {
     "recommendations": [
         "dprint.dprint",
+        "esbenp.prettier-vscode",
         "editorconfig.editorconfig"
     ]
 }
