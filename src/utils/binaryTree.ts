@@ -1,12 +1,8 @@
-export type BinaryTree = {
-    value: number[];
-    low?: BinaryTree;
-    high?: BinaryTree;
-};
+import { BinaryTree } from '../types/BinaryTree';
 
 export function generateBinaryTree(values: number[]): BinaryTree {
     if (values.length === 1) {
-        return { value: values };
+        return { values: values };
     }
 
     const [low, high] = split(values);
@@ -15,7 +11,7 @@ export function generateBinaryTree(values: number[]): BinaryTree {
     const highTree = generateBinaryTree(high);
 
     return {
-        value: values,
+        values: values,
         low: lowTree,
         high: highTree,
     };
