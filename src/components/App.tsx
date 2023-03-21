@@ -2,6 +2,7 @@ import JSZip from 'jszip';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
+import styles from '../styles/App.module.css';
 import { BinaryTree } from '../types/BinaryTree';
 import { generateBinaryTree } from '../utils/binaryTree';
 import { range } from '../utils/range';
@@ -17,7 +18,7 @@ type Inputs = {
     outputCommand: string;
 };
 
-export function Main() {
+export function App() {
     const { register, getValues } = useForm<Inputs>();
 
     const onClick = async () => {
@@ -114,49 +115,51 @@ export function Main() {
     };
 
     return (
-        <div>
-            <section>
-                <h1>Binary Branch Generator</h1>
-                <div>
-                    <label>
-                        Min:
-                        <input type='number' defaultValue='0' {...register('min')} />
-                    </label>
-                    <label>
-                        Max:
-                        <input type='number' defaultValue='0' {...register('max')} />
-                    </label>
+        <div className={styles['root']}>
+            <h1>
+                Binary Tree Generator
+            </h1>
+            <div className={styles['section']}>
+                <div className={styles['settings']}>
+                    <div className={styles['items']}>
+                        <div>
+                            Min <br />
+                            <input className={styles['input']} {...register('min')} type='number' defaultValue='0' />
+                        </div>
+                        <div>
+                            Max <br />
+                            <input className={styles['input']} {...register('max')} type='number' defaultValue='0' />
+                        </div>
+                        <br />
+                        <div>
+                            ScoreHolder <br />
+                            <input className={styles['input']} {...register('scoreHolder')} type='text' defaultValue='@s' />
+                        </div>
+                        <div>
+                            Objective <br />
+                            <input className={styles['input']} {...register('objective')} type='text' />
+                        </div>
+                        <br />
+                        <div>
+                            Namespace <br />
+                            <input className={styles['input']} {...register('namespace')} type='text' />
+                        </div>
+                        <div>
+                            Folder <br />
+                            <input className={styles['input']} {...register('folder')} type='text' />
+                        </div>
+                    </div>
+                    <div className={styles['items']}>
+                        <div>
+                            Output command <br />
+                            <textarea className={styles.textarea} {...register('outputCommand')} />
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <label>
-                        ScoreHolder:
-                        <input type='text' defaultValue='@s' {...register('scoreHolder')} />
-                    </label>
-                    <label>
-                        Objective:
-                        <input type='text' {...register('objective')} />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Namespace:
-                        <input type='text' {...register('namespace')} />
-                    </label>
-                    <label>
-                        Folder:
-                        <input type='text' {...register('folder')} />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Output command:
-                        <textarea {...register('outputCommand')} />
-                    </label>
-                </div>
-                <button type='button' onClick={onClick}>
+                <button className={styles['button']} onClick={onClick} type='button'>
                     Generate
                 </button>
-            </section>
+            </div>
         </div>
     );
 }
