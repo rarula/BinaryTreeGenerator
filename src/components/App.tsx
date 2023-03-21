@@ -52,7 +52,7 @@ export function App() {
         let currentTrees: BinaryTree[] = [tree];
 
         for (let i = 0; 0 < currentTrees.length; i++) {
-            let folderNumber = i;
+            const folderNumber = i;
             let fileNumber = 0;
 
             for (let j = 0; j < currentTrees.length; j++) {
