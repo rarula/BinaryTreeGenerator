@@ -7,7 +7,9 @@
         "start": "webpack-dev-server --mode development",
         "start-prod": "webpack-dev-server --mode production",
         "build": "webpack --mode development",
-        "build-prod": "webpack --mode production"
+        "build-prod": "webpack --mode production",
+        "typegen": "tcm src",
+        "typegen-watch": "tcm --watch src"
     },
     "author": "rarula",
     "license": "MIT",
@@ -15,9 +17,12 @@
         "@types/node": "^18.15.3",
         "@types/react": "^18.0.28",
         "@types/react-dom": "^18.0.11",
+        "css-loader": "^6.7.3",
         "dprint": "^0.35.3",
         "html-webpack-plugin": "^5.5.0",
+        "mini-css-extract-plugin": "^2.7.5",
         "ts-loader": "^9.4.2",
+        "typed-css-modules": "^0.7.2",
         "typescript": "^5.0.2",
         "webpack": "^5.76.2",
         "webpack-cli": "^5.0.1",

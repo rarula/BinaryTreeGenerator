@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     entry: './src/index.tsx',
@@ -8,14 +9,6 @@ module.exports = {
         filename: 'bundle.js',
     },
     devtool: 'inline-source-map',
-    module: {
-        rules: [
-            {
-                test: /\.tsx?$/,
-                loader: 'ts-loader',
-            },
-        ],
-    },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json'],
     },
@@ -26,10 +19,28 @@ module.exports = {
         open: true,
         port: 3000,
     },
+    module: {
+        rules: [
+            {
+                test: /\.css$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                ],
+            },
+            {
+                test: /\.tsx?$/,
+                loader: 'ts-loader',
+            },
+        ],
+    },
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.html',
             filename: 'index.html',
+        }),
+        new MiniCssExtractPlugin({
+            filename: `style.css`,
         }),
     ],
 };
