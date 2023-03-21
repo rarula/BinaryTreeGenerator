@@ -4,9 +4,9 @@ import { useForm } from 'react-hook-form';
 
 import styles from '../styles/App.module.css';
 import { BinaryTree } from '../types/BinaryTree';
-import { generateBinaryTree } from '../utils/binaryTree';
-import { range } from '../utils/range';
-import { joinResourcePath } from '../utils/resourcePath';
+import { split } from '../utils/array';
+import { range } from '../utils/number';
+import { join } from '../utils/resourcePath';
 
 type Inputs = {
     min: number;
@@ -45,6 +45,23 @@ export function App() {
         }
     };
 
+    const generateBinaryTree = (values: number[]): BinaryTree => {
+        if (values.length === 1) {
+            return { values: values };
+        }
+
+        const [low, high] = split(values);
+
+        const lowTree = generateBinaryTree(low);
+        const highTree = generateBinaryTree(high);
+
+        return {
+            values: values,
+            low: lowTree,
+            high: highTree,
+        };
+    };
+
     const generateDatapack = (zip: JSZip, tree: BinaryTree): void => {
         const { scoreHolder, objective, namespace, folder, outputCommand } = getValues();
 
@@ -71,7 +88,7 @@ export function App() {
                             text += `execute if score ${scoreHolder} ${objective} matches ${value} run ${command}` + '\n';
                         } else {
                             const ifScore = `${tree.low.values.at(0)}..${tree.low.values.at(-1)}`;
-                            const path = joinResourcePath(namespace, folder, (folderNumber + 1).toString(), fileNumber.toString());
+                            const path = join(namespace, folder, (folderNumber + 1).toString(), fileNumber.toString());
 
                             text += `execute if score ${scoreHolder} ${objective} matches ${ifScore} run function ${path}` + '\n';
                         }
@@ -92,7 +109,7 @@ export function App() {
                             text += `execute if score ${scoreHolder} ${objective} matches ${value} run ${command}` + '\n';
                         } else {
                             const ifScore = `${tree.high.values.at(0)}..${tree.high.values.at(-1)}`;
-                            const path = joinResourcePath(namespace, folder, (folderNumber + 1).toString(), fileNumber.toString());
+                            const path = join(namespace, folder, (folderNumber + 1).toString(), fileNumber.toString());
 
                             text += `execute if score ${scoreHolder} ${objective} matches ${ifScore} run function ${path}` + '\n';
                         }
