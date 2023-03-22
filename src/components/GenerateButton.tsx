@@ -19,13 +19,27 @@ type Props = {
 };
 
 const GenerateButton = ({ getValues }: Props): JSX.Element => {
+    const getPath = (): { namespace: string; folder: string; } => {
+        const namespace = getValues('namespace');
+        const folder = getValues('folder');
+
+        const fixedNamespace = namespace
+            ? namespace
+            : 'minecraft';
+
+        return {
+            namespace: trimNamespace(fixedNamespace),
+            folder: trimFolder(folder),
+        };
+    };
+
     const onClick = async () => {
-        const { min, max, namespace, folder } = getValues();
+        const { min, max } = getValues();
+        const { namespace, folder } = getPath();
 
-        const path = 'data/' + trimNamespace(namespace) + '/functions/' + trimFolder(folder);
+        // Zipの作成
         const zipRoot = JSZip();
-        const zipFolder = zipRoot.folder(path);
-
+        const zipFolder = zipRoot.folder('data/' + namespace + '/functions/' + folder);
         if (!zipFolder) return;
 
         // データパックの生成
@@ -64,10 +78,8 @@ const GenerateButton = ({ getValues }: Props): JSX.Element => {
     };
 
     const generateDatapack = (zip: JSZip, tree: BinaryTree): void => {
-        const { scoreHolder, objective, namespace, folder, command } = getValues();
-
-        const fixedNamespace = trimNamespace(namespace);
-        const fixedFolder = trimFolder(folder);
+        const { scoreHolder, objective, command } = getValues();
+        const { namespace, folder } = getPath();
 
         let nextTrees: BinaryTree[] = [tree];
         let currentTrees: BinaryTree[] = [];
@@ -96,7 +108,7 @@ const GenerateButton = ({ getValues }: Props): JSX.Element => {
 
                     if (tree.low.values.length > 1) {
                         const value = tree.low.values.at(0) + '..' + tree.low.values.at(-1);
-                        const path = join(fixedNamespace, fixedFolder, 'b' + (folderNum + 1).toString(), fileNum.toString());
+                        const path = join(namespace, folder, 'b' + (folderNum + 1).toString(), fileNum.toString());
 
                         text += `execute if score ${scoreHolder} ${objective} matches ${value} run function ${path}` + '\n';
 
@@ -115,7 +127,7 @@ const GenerateButton = ({ getValues }: Props): JSX.Element => {
 
                     if (tree.high.values.length > 1) {
                         const value = tree.high.values.at(0) + '..' + tree.high.values.at(-1);
-                        const path = join(fixedNamespace, fixedFolder, 'b' + (folderNum + 1).toString(), fileNum.toString());
+                        const path = join(namespace, folder, 'b' + (folderNum + 1).toString(), fileNum.toString());
 
                         text += `execute if score ${scoreHolder} ${objective} matches ${value} run function ${path}` + '\n';
 
@@ -123,10 +135,8 @@ const GenerateButton = ({ getValues }: Props): JSX.Element => {
                         fileNum++;
                     }
                 }
-
                 dir.file(i + '.mcfunction', text);
             }
-
             folderNum++;
         }
     };
