@@ -1,14 +1,13 @@
 import JSZip from 'jszip';
 import React from 'react';
-import { useForm } from 'react-hook-form';
 
-import styles from '../styles/App.module.css';
+import styles from '../styles/GenerateButton.module.css';
 import { BinaryTree } from '../types/BinaryTree';
 import { split } from '../utils/array';
 import { range } from '../utils/number';
 import { join } from '../utils/resourcePath';
 
-type Inputs = {
+type Props = {
     min: number;
     max: number;
     scoreHolder: string;
@@ -18,12 +17,8 @@ type Inputs = {
     outputCommand: string;
 };
 
-export function App() {
-    const { register, getValues } = useForm<Inputs>();
-
+export const GenerateButton = ({ min, max, scoreHolder, objective, namespace, folder, outputCommand }: Props): JSX.Element => {
     const onClick = async () => {
-        const { min, max, namespace, folder } = getValues();
-
         const values = range(min, max);
         const tree = generateBinaryTree(values);
 
@@ -63,8 +58,6 @@ export function App() {
     };
 
     const generateDatapack = (zip: JSZip, tree: BinaryTree): void => {
-        const { scoreHolder, objective, namespace, folder, outputCommand } = getValues();
-
         let nextTrees: BinaryTree[] = [];
         let currentTrees: BinaryTree[] = [tree];
 
@@ -132,51 +125,8 @@ export function App() {
     };
 
     return (
-        <div className={styles['root']}>
-            <h1>
-                Binary Tree Generator
-            </h1>
-            <div className={styles['section']}>
-                <div className={styles['settings']}>
-                    <div className={styles['items']}>
-                        <div>
-                            Min <br />
-                            <input className={styles['input']} {...register('min')} type='number' defaultValue='0' />
-                        </div>
-                        <div>
-                            Max <br />
-                            <input className={styles['input']} {...register('max')} type='number' defaultValue='0' />
-                        </div>
-                        <br />
-                        <div>
-                            ScoreHolder <br />
-                            <input className={styles['input']} {...register('scoreHolder')} type='text' defaultValue='@s' />
-                        </div>
-                        <div>
-                            Objective <br />
-                            <input className={styles['input']} {...register('objective')} type='text' />
-                        </div>
-                        <br />
-                        <div>
-                            Namespace <br />
-                            <input className={styles['input']} {...register('namespace')} type='text' />
-                        </div>
-                        <div>
-                            Folder <br />
-                            <input className={styles['input']} {...register('folder')} type='text' />
-                        </div>
-                    </div>
-                    <div className={styles['items']}>
-                        <div>
-                            Output command <br />
-                            <textarea className={styles.textarea} {...register('outputCommand')} />
-                        </div>
-                    </div>
-                </div>
-                <button className={styles['button']} onClick={onClick} type='button'>
-                    Generate
-                </button>
-            </div>
-        </div>
+        <button className={styles.button} onClick={onClick}>
+            Generate
+        </button>
     );
-}
+};

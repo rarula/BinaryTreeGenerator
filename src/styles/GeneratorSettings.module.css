@@ -1,0 +1,63 @@
+.section {
+    position: relative;
+    left: calc(50% - 75% / 2);
+    top: calc(50% - 75% / 2);
+
+    width: 75%;
+    height: auto;
+
+    background-color: rgb(53, 58, 62);
+
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: rgb(89, 95, 101);
+}
+
+.settings {
+    display: flex;
+    flex-wrap: wrap;
+
+    position: relative;
+    left: calc(50% - 50% / 2);
+    top: calc(50% - 50% / 2);
+
+    width: 50%;
+    height: auto;
+}
+
+.items {
+    left: calc(50% - 30%);
+
+    width: calc(100% / 2);
+    height: auto;
+
+    text-align: center;
+}
+
+.input {
+    width: 15em;
+    height: 1.5em;
+
+    padding: 5px 10px;
+
+    background-color: rgb(70, 75, 81);
+    color: rgb(192, 192, 192);
+
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: rgb(89, 95, 101);
+}
+
+.textarea {
+    width: 60%;
+    height: 80px;
+
+    padding: 5px 10px;
+
+    background-color: rgb(70, 75, 81);
+    color: rgb(192, 192, 192);
+
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: rgb(89, 95, 101);
+}
