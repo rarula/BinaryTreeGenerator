@@ -21,5 +21,7 @@ module.exports = {
         'react',
         '@typescript-eslint',
     ],
-    'rules': {},
+    'rules': {
+        '@typescript-eslint/explicit-function-return-type': 'error',
+    },
 };

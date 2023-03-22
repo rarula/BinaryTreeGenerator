@@ -33,7 +33,7 @@ const GenerateButton = ({ getValues }: Props): JSX.Element => {
         };
     };
 
-    const onClick = async () => {
+    const onClick = async (): Promise<void> => {
         const { min, max } = getValues();
         const { namespace, folder } = getPath();
 
