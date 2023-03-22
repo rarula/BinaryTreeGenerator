@@ -1,43 +1,49 @@
 import JSZip from 'jszip';
 import React from 'react';
+import { UseFormGetValues } from 'react-hook-form';
 
 import styles from '../styles/GenerateButton.module.css';
-import { BinaryTree } from '../types/BinaryTree';
+import { Settings } from '../types/Settings';
 import { split } from '../utils/array';
 import { range } from '../utils/number';
-import { join } from '../utils/resourcePath';
+import { join, trimFolder, trimNamespace } from '../utils/resourcePath';
 
-type Props = {
-    min: number;
-    max: number;
-    scoreHolder: string;
-    objective: string;
-    namespace: string;
-    folder: string;
-    outputCommand: string;
+type BinaryTree = {
+    values: number[];
+    low?: BinaryTree;
+    high?: BinaryTree;
 };
 
-export const GenerateButton = ({ min, max, scoreHolder, objective, namespace, folder, outputCommand }: Props): JSX.Element => {
+type Props = {
+    getValues: UseFormGetValues<Settings>;
+};
+
+const GenerateButton = ({ getValues }: Props): JSX.Element => {
     const onClick = async () => {
+        const { min, max, namespace, folder } = getValues();
+
+        const path = 'data/' + trimNamespace(namespace) + '/functions/' + trimFolder(folder);
+        const zipRoot = JSZip();
+        const zipFolder = zipRoot.folder(path);
+
+        if (!zipFolder) return;
+
+        // データパックの生成
         const values = range(min, max);
         const tree = generateBinaryTree(values);
+        generateDatapack(zipFolder, tree);
 
-        const zipRoot = new JSZip();
-        const zipFunctions = zipRoot.folder('data/' + namespace + '/functions/' + folder);
+        // Zipの生成
+        const zip = await zipRoot.generateAsync({
+            type: 'blob',
+            compression: 'DEFLATE',
+        });
 
-        if (zipFunctions) {
-            generateDatapack(zipFunctions, tree);
-            const datapack = await zipRoot.generateAsync({
-                type: 'blob',
-                compression: 'DEFLATE',
-            });
-
-            // ダウンロード
-            const a = document.createElement('a');
-            a.href = window.URL.createObjectURL(datapack);
-            a.download = 'BinaryTree datapack';
-            a.click();
-        }
+        // Zipのダウンロード
+        const a = document.createElement('a');
+        a.href = window.URL.createObjectURL(zip);
+        a.download = 'BinaryTree datapack';
+        a.click();
     };
 
     const generateBinaryTree = (values: number[]): BinaryTree => {
@@ -58,69 +64,70 @@ export const GenerateButton = ({ min, max, scoreHolder, objective, namespace, fo
     };
 
     const generateDatapack = (zip: JSZip, tree: BinaryTree): void => {
-        let nextTrees: BinaryTree[] = [];
-        let currentTrees: BinaryTree[] = [tree];
+        const { scoreHolder, objective, namespace, folder, command } = getValues();
 
-        for (let i = 0; 0 < currentTrees.length; i++) {
-            const folderNumber = i;
-            let fileNumber = 0;
+        const fixedNamespace = trimNamespace(namespace);
+        const fixedFolder = trimFolder(folder);
 
-            for (let j = 0; j < currentTrees.length; j++) {
-                const tree = currentTrees[j];
-                const directory = zip.folder(folderNumber.toString());
+        let nextTrees: BinaryTree[] = [tree];
+        let currentTrees: BinaryTree[] = [];
 
-                if (directory) {
-                    let text = '';
-
-                    if (tree.low) {
-                        // valuesが1ならそれ以上は分岐しない
-                        if (tree.low.values.length === 1) {
-                            const value = tree.low.values[0];
-                            const command = outputCommand.replaceAll('$i', value.toString());
-
-                            text += `execute if score ${scoreHolder} ${objective} matches ${value} run ${command}` + '\n';
-                        } else {
-                            const ifScore = `${tree.low.values.at(0)}..${tree.low.values.at(-1)}`;
-                            const path = join(namespace, folder, (folderNumber + 1).toString(), fileNumber.toString());
-
-                            text += `execute if score ${scoreHolder} ${objective} matches ${ifScore} run function ${path}` + '\n';
-                        }
-
-                        // tree.low.lowがあるならtree.low.highも存在しているはず
-                        // これらの分岐(tree.low.low, tree.low.high)を含むtree.lowは確認する必要があるため、nextTreesに追加する
-                        if (tree.low.low) {
-                            nextTrees.push(tree.low);
-                            fileNumber++;
-                        }
-                    }
-                    if (tree.high) {
-                        // valuesが1ならそれ以上は分岐しない
-                        if (tree.high.values.length === 1) {
-                            const value = tree.high.values[0];
-                            const command = outputCommand.replaceAll('$i', value.toString());
-
-                            text += `execute if score ${scoreHolder} ${objective} matches ${value} run ${command}` + '\n';
-                        } else {
-                            const ifScore = `${tree.high.values.at(0)}..${tree.high.values.at(-1)}`;
-                            const path = join(namespace, folder, (folderNumber + 1).toString(), fileNumber.toString());
-
-                            text += `execute if score ${scoreHolder} ${objective} matches ${ifScore} run function ${path}` + '\n';
-                        }
-
-                        // tree.high.highがあるならtree.high.lowも存在しているはず
-                        // これらの分岐(tree.high.high, tree.high.low)を含むtree.highは確認する必要があるため、nextTreesに追加する
-                        if (tree.high.high) {
-                            nextTrees.push(tree.high);
-                            fileNumber++;
-                        }
-                    }
-
-                    directory.file(j + '.mcfunction', text);
-                }
-            }
-
+        let folderNum = 0;
+        while (0 < nextTrees.length) {
             currentTrees = nextTrees;
             nextTrees = [];
+
+            let fileNum = 0;
+
+            for (let i = 0; i < currentTrees.length; i++) {
+                const tree = currentTrees[i];
+
+                const dir = zip.folder('b' + folderNum.toString());
+                if (!dir) continue;
+
+                let text = '';
+                if (tree.low) {
+                    if (tree.low.values.length === 1) {
+                        const value = tree.low.values[0];
+                        const output = command.replaceAll('$i', value.toString());
+
+                        text += `execute if score ${scoreHolder} ${objective} matches ${value} run ${output}` + '\n';
+                    }
+
+                    if (tree.low.values.length > 1) {
+                        const value = tree.low.values.at(0) + '..' + tree.low.values.at(-1);
+                        const path = join(fixedNamespace, fixedFolder, (folderNum + 1).toString(), fileNum.toString());
+
+                        text += `execute if score ${scoreHolder} ${objective} matches ${value} run function ${path}` + '\n';
+
+                        nextTrees.push(tree.low);
+                        fileNum++;
+                    }
+                }
+
+                if (tree.high) {
+                    if (tree.high.values.length === 1) {
+                        const value = tree.high.values[0];
+                        const output = command.replaceAll('$i', value.toString());
+
+                        text += `execute if score ${scoreHolder} ${objective} matches ${value} run ${output}` + '\n';
+                    }
+
+                    if (tree.high.values.length > 1) {
+                        const value = tree.high.values.at(0) + '..' + tree.high.values.at(-1);
+                        const path = join(fixedNamespace, fixedFolder, (folderNum + 1).toString(), fileNum.toString());
+
+                        text += `execute if score ${scoreHolder} ${objective} matches ${value} run function ${path}` + '\n';
+
+                        nextTrees.push(tree.high);
+                        fileNum++;
+                    }
+                }
+
+                dir.file(i + '.mcfunction', text);
+            }
+
+            folderNum++;
         }
     };
 
@@ -130,3 +137,5 @@ export const GenerateButton = ({ min, max, scoreHolder, objective, namespace, fo
         </button>
     );
 };
+
+export default GenerateButton;

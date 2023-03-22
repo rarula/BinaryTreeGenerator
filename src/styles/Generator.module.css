@@ -1,0 +1,18 @@
+.root {
+    text-align: center;
+}
+
+.main {
+    position: relative;
+    left: calc(50% - 75% / 2);
+    top: calc(50% - 75% / 2);
+
+    width: 75%;
+    height: auto;
+
+    background-color: rgb(53, 58, 62);
+
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: rgb(89, 95, 101);
+}

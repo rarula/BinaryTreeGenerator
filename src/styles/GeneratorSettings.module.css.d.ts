@@ -1,7 +1,8 @@
 declare const styles: {
-  readonly "section": string;
   readonly "settings": string;
-  readonly "items": string;
+  readonly "item-group-list": string;
+  readonly "item-group": string;
+  readonly "item": string;
   readonly "input": string;
   readonly "textarea": string;
 };

@@ -1,18 +1,3 @@
-.section {
-    position: relative;
-    left: calc(50% - 75% / 2);
-    top: calc(50% - 75% / 2);
-
-    width: 75%;
-    height: auto;
-
-    background-color: rgb(53, 58, 62);
-
-    border: 1px solid;
-    border-radius: 5px;
-    border-color: rgb(89, 95, 101);
-}
-
 .settings {
     display: flex;
     flex-wrap: wrap;
@@ -25,13 +10,17 @@
     height: auto;
 }
 
-.items {
-    left: calc(50% - 30%);
-
-    width: calc(100% / 2);
+.item-group-list {
+    width: 50%;
     height: auto;
+}
 
-    text-align: center;
+.item-group {
+    padding-top: 30px;
+}
+
+.item {
+    padding-top: 5px;
 }
 
 .input {
@@ -40,8 +29,8 @@
 
     padding: 5px 10px;
 
-    background-color: rgb(70, 75, 81);
     color: rgb(192, 192, 192);
+    background-color: rgb(70, 75, 81);
 
     border: 1px solid;
     border-radius: 5px;
@@ -54,8 +43,8 @@
 
     padding: 5px 10px;
 
-    background-color: rgb(70, 75, 81);
     color: rgb(192, 192, 192);
+    background-color: rgb(70, 75, 81);
 
     border: 1px solid;
     border-radius: 5px;

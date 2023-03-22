@@ -2,10 +2,12 @@ import React, { ReactElement } from 'react';
 
 import '../styles/Theme.module.css';
 
-export function Theme({ children }: { children: ReactElement; }) {
+const Theme = ({ children }: { children: ReactElement; }): JSX.Element => {
     return (
         <div>
             {children}
         </div>
     );
-}
+};
+
+export default Theme;

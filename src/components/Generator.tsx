@@ -1,15 +1,35 @@
 import React from 'react';
+import { useForm } from 'react-hook-form';
 
-import styles from '../styles/App.module.css';
-import { GeneratorSettings } from './GeneratorSettings';
+import styles from '../styles/Generator.module.css';
+import { Settings } from '../types/Settings';
+import GenerateButton from './GenerateButton';
+import GeneratorSettings from './GeneratorSettings';
 
-export function Generator(): JSX.Element {
+const Generator = (): JSX.Element => {
+    const { register, getValues } = useForm<Settings>({
+        defaultValues: {
+            min: 0,
+            max: 0,
+            scoreHolder: '@s',
+            objective: '',
+            namespace: '',
+            folder: '',
+            command: '',
+        },
+    });
+
     return (
         <div className={styles['root']}>
             <h1>
                 Binary Tree Generator
             </h1>
-            <GeneratorSettings />
+            <div className={styles['main']}>
+                <GeneratorSettings register={register} />
+                <GenerateButton getValues={getValues} />
+            </div>
         </div>
     );
-}
+};
+
+export default Generator;

@@ -1,67 +1,75 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { UseFormRegister } from 'react-hook-form';
 
 import styles from '../styles/GeneratorSettings.module.css';
-import { GenerateButton } from './GenerateButton';
+import { Settings } from '../types/Settings';
 
-type Settings = {
-    min: number;
-    max: number;
-
-    scoreHolder: string;
-    objective: string;
-
-    namespace: string;
-    folder: string;
-
-    command: string;
+type Props = {
+    register: UseFormRegister<Settings>;
 };
 
-export const GeneratorSettings = (): JSX.Element => {
-    const { register, getValues } = useForm<Settings>();
-
-    const { min, max, scoreHolder, objective, namespace, folder, command } = getValues();
-
+const GeneratorSettings = ({ register }: Props): JSX.Element => {
     return (
-        <div className={styles['section']}>
-            <div className={styles['settings']}>
-                <div className={styles['items']}>
-                    <div>
-                        Min <br />
-                        <input className={styles['input']} {...register('min')} type='number' defaultValue='0' />
+        <div className={styles['settings']}>
+            <div className={styles['item-group-list']}>
+                <div className={styles['item-group']}>
+                    <div className={styles['item']}>
+                        <label>
+                            Min <br />
+                        </label>
+                        <input className={styles['input']} {...register('min')} type='number' />
                     </div>
-                    <div>
-                        Max <br />
-                        <input className={styles['input']} {...register('max')} type='number' defaultValue='0' />
-                    </div>
-                    <br />
-                    <div>
-                        ScoreHolder <br />
-                        <input className={styles['input']} {...register('scoreHolder')} type='text' defaultValue='@s' />
-                    </div>
-                    <div>
-                        Objective <br />
-                        <input className={styles['input']} {...register('objective')} type='text' />
-                    </div>
-                    <br />
-                    <div>
-                        Namespace <br />
-                        <input className={styles['input']} {...register('namespace')} type='text' />
-                    </div>
-                    <div>
-                        Folder <br />
-                        <input className={styles['input']} {...register('folder')} type='text' />
+                    <div className={styles['item']}>
+                        <label>
+                            Max <br />
+                        </label>
+                        <input className={styles['input']} {...register('max')} type='number' />
                     </div>
                 </div>
-                <div className={styles['items']}>
-                    <div>
-                        Output command <br />
-                        <textarea className={styles.textarea} {...register('command')} />
+
+                <div className={styles['item-group']}>
+                    <div className={styles['item']}>
+                        <label>
+                            Score holder <br />
+                        </label>
+                        <input className={styles['input']} {...register('scoreHolder')} type='text' />
+                    </div>
+                    <div className={styles['item']}>
+                        <label>
+                            Objective <br />
+                        </label>
+                        <input className={styles['input']} {...register('objective')} type='text' />
+                    </div>
+                </div>
+
+                <div className={styles['item-group']}>
+                    <div className={styles['item']}>
+                        <label>
+                            Namespace <br />
+                        </label>
+                        <input className={styles['input']} {...register('namespace')} type='text' />
+                    </div>
+                    <div className={styles['item']}>
+                        <label>
+                            Folder <br />
+                        </label>
+                        <input className={styles['input']} {...register('folder')} type='text' />
                     </div>
                 </div>
             </div>
 
-            <GenerateButton min={min} max={max} scoreHolder={scoreHolder} objective={objective} namespace={namespace} folder={folder} outputCommand={command} />
+            <div className={styles['item-group-list']}>
+                <div className={styles['item-group']}>
+                    <div className={styles['item']}>
+                        <label>
+                            Output command <br />
+                        </label>
+                        <textarea className={styles['textarea']} {...register('command')} />
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
+
+export default GeneratorSettings;
