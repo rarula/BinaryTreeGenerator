@@ -96,7 +96,7 @@ const GenerateButton = ({ getValues }: Props): JSX.Element => {
 
                     if (tree.low.values.length > 1) {
                         const value = tree.low.values.at(0) + '..' + tree.low.values.at(-1);
-                        const path = join(fixedNamespace, fixedFolder, (folderNum + 1).toString(), fileNum.toString());
+                        const path = join(fixedNamespace, fixedFolder, 'b' + (folderNum + 1).toString(), fileNum.toString());
 
                         text += `execute if score ${scoreHolder} ${objective} matches ${value} run function ${path}` + '\n';
 
@@ -115,7 +115,7 @@ const GenerateButton = ({ getValues }: Props): JSX.Element => {
 
                     if (tree.high.values.length > 1) {
                         const value = tree.high.values.at(0) + '..' + tree.high.values.at(-1);
-                        const path = join(fixedNamespace, fixedFolder, (folderNum + 1).toString(), fileNum.toString());
+                        const path = join(fixedNamespace, fixedFolder, 'b' + (folderNum + 1).toString(), fileNum.toString());
 
                         text += `execute if score ${scoreHolder} ${objective} matches ${value} run function ${path}` + '\n';
 
