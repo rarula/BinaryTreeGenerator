@@ -1,4 +1,7 @@
 body {
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Meiryo",
+        sans-serif;
+
     color: rgb(192, 192, 192);
     background-color: rgb(42, 46, 50);
 }
