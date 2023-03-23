@@ -8,5 +8,5 @@ export type Settings = {
     namespace: string;
     folder: string;
 
-    command: string;
+    commands: string;
 };

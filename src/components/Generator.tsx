@@ -15,7 +15,7 @@ const Generator = (): JSX.Element => {
             objective: '',
             namespace: '',
             folder: '',
-            command: '',
+            commands: '',
         },
     });
 

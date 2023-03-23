@@ -33,8 +33,11 @@ const GenerateButton = ({ getValues }: Props): JSX.Element => {
         };
     };
 
+    const getCommands = (): string[] => {
+        return getValues('commands').split('\n');
+    };
+
     const onClick = async (): Promise<void> => {
-        const { min, max } = getValues();
         const { namespace, folder } = getPath();
 
         // Zipの作成
@@ -43,9 +46,7 @@ const GenerateButton = ({ getValues }: Props): JSX.Element => {
         if (!zipFolder) return;
 
         // データパックの生成
-        const values = range(min, max);
-        const tree = generateBinaryTree(values);
-        generateDatapack(zipFolder, tree);
+        generateDatapack(zipFolder);
 
         // Zipの生成
         const zip = await zipRoot.generateAsync({
@@ -77,14 +78,20 @@ const GenerateButton = ({ getValues }: Props): JSX.Element => {
         };
     };
 
-    const generateDatapack = (zip: JSZip, tree: BinaryTree): void => {
-        const { scoreHolder, objective, command } = getValues();
+    const generateDatapack = (zip: JSZip): void => {
+        const { min, max, scoreHolder, objective } = getValues();
         const { namespace, folder } = getPath();
+        const commands = getCommands();
 
-        let nextTrees: BinaryTree[] = [tree];
+        const values = range(min, max);
+        const tree = generateBinaryTree(values);
+
+        const isSingleCommand = commands.length === 1;
         let currentTrees: BinaryTree[] = [];
+        let nextTrees: BinaryTree[] = [tree];
 
         let folderNum = 0;
+
         while (0 < nextTrees.length) {
             currentTrees = nextTrees;
             nextTrees = [];
@@ -92,52 +99,67 @@ const GenerateButton = ({ getValues }: Props): JSX.Element => {
             let fileNum = 0;
 
             for (let i = 0; i < currentTrees.length; i++) {
-                const tree = currentTrees[i];
+                const directory = zip.folder(`b-${folderNum}`);
+                if (!directory) continue;
 
-                const dir = zip.folder('b' + folderNum.toString());
-                if (!dir) continue;
+                const currentTree = currentTrees[i];
 
-                let text = '';
-                if (tree.low) {
-                    if (tree.low.values.length === 1) {
-                        const value = tree.low.values[0];
-                        const output = command.replaceAll('$i', value.toString());
+                if (currentTree.low && currentTree.high) {
+                    const trees: BinaryTree[] = [
+                        currentTree.low,
+                        currentTree.high,
+                    ];
 
-                        text += `execute if score ${scoreHolder} ${objective} matches ${value} run ${output}` + '\n';
+                    let text = '';
+                    for (const tree of trees) {
+                        // これ以上の分岐が存在しない
+                        if (tree.values.length === 1) {
+                            if (isSingleCommand) {
+                                const value = tree.values[0];
+                                const output = commands[0].replaceAll('$i', value.toString());
+
+                                text += `execute if score ${scoreHolder} ${objective} matches ${value} run ${output}` + '\n';
+                            }
+
+                            if (!isSingleCommand) {
+                                const value = tree.values[0];
+                                const path = join(namespace, folder, 'b-end', `${value}`);
+
+                                text += `execute if score ${scoreHolder} ${objective} matches ${value} run function ${path}` + '\n';
+                            }
+                        }
+
+                        // これ以上の分岐が存在している
+                        if (tree.values.length > 1) {
+                            const min = tree.values.at(0);
+                            const max = tree.values.at(-1);
+                            const path = join(namespace, folder, 'b-' + `${folderNum + 1}`, `${fileNum}`);
+
+                            text += `execute if score ${scoreHolder} ${objective} matches ${min}..${max} run function ${path}` + '\n';
+
+                            fileNum++;
+                            nextTrees.push(tree);
+                        }
                     }
 
-                    if (tree.low.values.length > 1) {
-                        const value = tree.low.values.at(0) + '..' + tree.low.values.at(-1);
-                        const path = join(namespace, folder, 'b' + (folderNum + 1).toString(), fileNum.toString());
-
-                        text += `execute if score ${scoreHolder} ${objective} matches ${value} run function ${path}` + '\n';
-
-                        nextTrees.push(tree.low);
-                        fileNum++;
-                    }
+                    directory.file(`${i}.mcfunction`, text);
                 }
-
-                if (tree.high) {
-                    if (tree.high.values.length === 1) {
-                        const value = tree.high.values[0];
-                        const output = command.replaceAll('$i', value.toString());
-
-                        text += `execute if score ${scoreHolder} ${objective} matches ${value} run ${output}` + '\n';
-                    }
-
-                    if (tree.high.values.length > 1) {
-                        const value = tree.high.values.at(0) + '..' + tree.high.values.at(-1);
-                        const path = join(namespace, folder, 'b' + (folderNum + 1).toString(), fileNum.toString());
-
-                        text += `execute if score ${scoreHolder} ${objective} matches ${value} run function ${path}` + '\n';
-
-                        nextTrees.push(tree.high);
-                        fileNum++;
-                    }
-                }
-                dir.file(i + '.mcfunction', text);
             }
+
             folderNum++;
+        }
+
+        if (!isSingleCommand) {
+            const directory = zip.folder(`b-end`);
+            if (!directory) return;
+
+            for (const value of values) {
+                const text = commands.map((command) => {
+                    return command.replaceAll('$i', value.toString());
+                });
+
+                directory.file(`${value}.mcfunction`, text.join('\n'));
+            }
         }
     };
 

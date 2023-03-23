@@ -62,9 +62,9 @@ const GeneratorSettings = ({ register }: Props): JSX.Element => {
                 <div className={styles['item-group']}>
                     <div className={styles['item']}>
                         <label>
-                            Output command <br />
+                            Output commands <br />
                         </label>
-                        <textarea className={styles['textarea']} {...register('command')} />
+                        <textarea className={styles['textarea']} {...register('commands')} />
                     </div>
                 </div>
             </div>
