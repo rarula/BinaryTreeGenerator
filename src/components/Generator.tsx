@@ -5,6 +5,7 @@ import styles from '../styles/Generator.module.css';
 import { Settings } from '../types/Settings';
 import DownloadButton from './DownloadButton';
 import GeneratorSettings from './GeneratorSettings';
+import Header from './Header';
 
 const Generator = (): JSX.Element => {
     const { register, getValues } = useForm<Settings>({
@@ -20,15 +21,15 @@ const Generator = (): JSX.Element => {
     });
 
     return (
-        <div className={styles['root']}>
-            <h1>
-                Binary Tree Generator
-            </h1>
-            <div className={styles['main']}>
-                <GeneratorSettings register={register} />
-                <DownloadButton getValues={getValues} />
+        <>
+            <Header />
+            <div className={styles['area']}>
+                <div className={styles['contents']}>
+                    <GeneratorSettings register={register} />
+                    <DownloadButton getValues={getValues} />
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

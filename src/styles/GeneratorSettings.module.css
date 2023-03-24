@@ -1,18 +1,12 @@
 .settings {
-    display: flex;
-    flex-wrap: wrap;
-
-    position: relative;
-    left: calc(50% - 50% / 2);
-    top: calc(50% - 50% / 2);
-
-    width: 50%;
-    height: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
 }
 
-.item-group-list {
-    width: 50%;
-    height: auto;
+.settings-column {
+    display: flex;
+    flex-direction: column;
 }
 
 .item-group {
@@ -24,35 +18,13 @@
 }
 
 .input {
-    width: 60%;
-    height: 1.5em;
-
-    padding: 5px 10px;
-
-    font-size: 100%;
-
     color: rgb(192, 192, 192);
-    background-color: rgb(70, 75, 81);
-
-    border: 1px solid;
-    border-radius: 5px;
+    background-color: rgb(48, 51, 55);
     border-color: rgb(89, 95, 101);
 }
 
-.textarea {
-    width: 60%;
-    height: 80px;
-
-    padding: 5px 10px;
-
-    font-size: 100%;
-    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Meiryo",
-        sans-serif;
-
+.input:focus {
     color: rgb(192, 192, 192);
-    background-color: rgb(70, 75, 81);
-
-    border: 1px solid;
-    border-radius: 5px;
-    border-color: rgb(89, 95, 101);
+    background-color: rgb(51, 54, 58);
+    border-color: rgb(128, 128, 128);
 }

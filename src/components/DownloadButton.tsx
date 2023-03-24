@@ -2,8 +2,9 @@ import JSZip from 'jszip';
 import React from 'react';
 import { UseFormGetValues } from 'react-hook-form';
 
+import { Button } from 'react-bootstrap';
 import { createDatapack } from '../generator/datapack';
-import styles from '../styles/GenerateButton.module.css';
+import styles from '../styles/DownloadButton.module.css';
 import { FixedSettings, Settings } from '../types/Settings';
 import { trimFolder, trimNamespace } from '../utils/resourcePath';
 
@@ -61,9 +62,11 @@ const DownloadButton = ({ getValues }: Props): JSX.Element => {
     };
 
     return (
-        <button className={styles.button} onClick={onClick}>
-            Download
-        </button>
+        <div className={styles['button-pos']}>
+            <Button className={styles['button']} variant='outline-secondary' onClick={onClick}>
+                Download
+            </Button>
+        </div>
     );
 };
 

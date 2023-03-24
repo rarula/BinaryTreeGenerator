@@ -1,0 +1,18 @@
+.button-pos {
+    text-align: center;
+}
+
+.button {
+    width: 15%;
+
+    margin-top: 50px;
+    margin-bottom: 50px;
+
+    color: rgb(192, 192, 192);
+    border-color: rgb(89, 95, 101);
+}
+
+.button:hover {
+    background-color: rgb(98, 103, 108);
+    border-color: rgb(89, 95, 101);
+}

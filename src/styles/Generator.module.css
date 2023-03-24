@@ -1,18 +1,21 @@
-.root {
-    text-align: center;
-}
+.area {
+    margin: 0 auto;
 
-.main {
-    position: relative;
-    left: calc(50% - 75% / 2);
-    top: calc(50% - 75% / 2);
+    padding-top: 60px;
 
-    width: 75%;
+    max-width: 1000px;
     height: auto;
 
-    background-color: rgb(53, 58, 62);
-
+    background-color: rgb(39, 43, 47);
+    box-shadow: 0 0 7px -2px rgb(0, 0, 0);
     border: 1px solid;
     border-radius: 5px;
     border-color: rgb(89, 95, 101);
+}
+
+.contents {
+    margin: 0 auto;
+
+    width: 75%;
+    height: auto;
 }
