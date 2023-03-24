@@ -46,7 +46,7 @@ function getCommand(commands: string | string[], replaceValue: string): string {
 }
 
 export function createDatapack(zip: JSZip, settings: FixedSettings): void {
-    const zipFunc = zip.folder(`data/${settings.namespace}/functions/${settings.folder}`);
+    const zipFunc = zip.folder(`data/${settings.namespace}/functions/${settings.path}`);
     if (!zipFunc) return;
 
     const binaryTree = generateBinaryTree(range(settings.min, settings.max));
@@ -82,7 +82,7 @@ export function createDatapack(zip: JSZip, settings: FixedSettings): void {
                             text += `${value} run ${output}`;
                         } else {
                             const value = tree.values[0];
-                            const path = join(settings.namespace, settings.folder, 'b-end', `${value}`);
+                            const path = join(settings.namespace, settings.path, 'b-end', `${value}`);
                             text += `${value} run function ${path}`;
 
                             const text2 = getCommand(settings.commands, value.toString());
@@ -91,7 +91,7 @@ export function createDatapack(zip: JSZip, settings: FixedSettings): void {
                     } else {
                         const min = tree.values.at(0);
                         const max = tree.values.at(-1);
-                        const path = join(settings.namespace, settings.folder, `b-${i + 1}`, `${nextFileNum}`);
+                        const path = join(settings.namespace, settings.path, `b-${i + 1}`, `${nextFileNum}`);
                         text += `${min}..${max} run function ${path}`;
 
                         nextTreeList.push(tree);

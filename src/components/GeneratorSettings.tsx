@@ -51,9 +51,9 @@ const GeneratorSettings = ({ register }: Props): JSX.Element => {
                     </div>
                     <div className={styles['item']}>
                         <label>
-                            Folder <br />
+                            Path <br />
                         </label>
-                        <input className={styles['input']} {...register('folder')} type='text' />
+                        <input className={styles['input']} {...register('path')} type='text' />
                     </div>
                 </div>
             </div>

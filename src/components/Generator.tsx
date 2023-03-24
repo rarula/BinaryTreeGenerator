@@ -14,7 +14,7 @@ const Generator = (): JSX.Element => {
             scoreHolder: '@s',
             objective: '',
             namespace: '',
-            folder: '',
+            path: '',
             commands: '',
         },
     });

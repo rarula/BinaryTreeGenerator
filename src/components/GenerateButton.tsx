@@ -22,7 +22,7 @@ const GenerateButton = ({ getValues }: Props): JSX.Element => {
             objective: values.objective,
 
             namespace: values.namespace ? trimNamespace(values.namespace) : 'minecraft',
-            folder: trimFolder(values.folder),
+            path: trimFolder(values.path),
 
             commands: values.commands.split('\n'),
         };

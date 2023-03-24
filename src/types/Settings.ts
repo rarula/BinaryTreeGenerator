@@ -6,7 +6,7 @@ export type Settings = {
     objective: string;
 
     namespace: string;
-    folder: string;
+    path: string;
 
     commands: string;
 };
@@ -19,7 +19,7 @@ export type FixedSettings = {
     objective: string;
 
     namespace: string;
-    folder: string;
+    path: string;
 
     commands: string[];
 };
