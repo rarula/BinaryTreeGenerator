@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 
 import styles from '../styles/Generator.module.css';
 import { Settings } from '../types/Settings';
-import GenerateButton from './GenerateButton';
+import DownloadButton from './DownloadButton';
 import GeneratorSettings from './GeneratorSettings';
 
 const Generator = (): JSX.Element => {
@@ -26,7 +26,7 @@ const Generator = (): JSX.Element => {
             </h1>
             <div className={styles['main']}>
                 <GeneratorSettings register={register} />
-                <GenerateButton getValues={getValues} />
+                <DownloadButton getValues={getValues} />
             </div>
         </div>
     );

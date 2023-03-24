@@ -11,7 +11,7 @@ type Props = {
     getValues: UseFormGetValues<Settings>;
 };
 
-const GenerateButton = ({ getValues }: Props): JSX.Element => {
+const DownloadButton = ({ getValues }: Props): JSX.Element => {
     const getCommands = (): string[] => {
         const commands = getValues('commands').split('\n');
         const filtered = commands
@@ -62,9 +62,9 @@ const GenerateButton = ({ getValues }: Props): JSX.Element => {
 
     return (
         <button className={styles.button} onClick={onClick}>
-            Generate
+            Download
         </button>
     );
 };
 
-export default GenerateButton;
+export default DownloadButton;
