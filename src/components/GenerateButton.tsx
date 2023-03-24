@@ -12,6 +12,18 @@ type Props = {
 };
 
 const GenerateButton = ({ getValues }: Props): JSX.Element => {
+    const getCommands = (): string[] => {
+        const commands = getValues('commands').split('\n');
+        const filtered = commands
+            .filter((command) => {
+                return command;
+            });
+
+        return filtered.length > 1
+            ? commands
+            : filtered;
+    };
+
     const getSettings = (): FixedSettings => {
         const values = getValues();
         return {
@@ -24,7 +36,7 @@ const GenerateButton = ({ getValues }: Props): JSX.Element => {
             namespace: values.namespace ? trimNamespace(values.namespace) : 'minecraft',
             path: trimFolder(values.path),
 
-            commands: values.commands.split('\n'),
+            commands: getCommands(),
         };
     };
 
