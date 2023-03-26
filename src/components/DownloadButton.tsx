@@ -44,7 +44,7 @@ const DownloadButton = ({ getValues, handleSubmit }: Props): JSX.Element => {
         };
     };
 
-    const onClick = async (): Promise<void> => {
+    const handleDownload = async (): Promise<void> => {
         const zip = JSZip();
         if (zip) {
             // データパックの生成
@@ -66,7 +66,7 @@ const DownloadButton = ({ getValues, handleSubmit }: Props): JSX.Element => {
 
     return (
         <div className={styles['button-pos']}>
-            <Button className={styles['button']} variant='outline-secondary' onClick={handleSubmit(onClick)}>
+            <Button className={styles['button']} variant='outline-secondary' onClick={handleSubmit(handleDownload)}>
                 Download
             </Button>
         </div>
