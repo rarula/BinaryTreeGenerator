@@ -2,6 +2,7 @@
     "name": "binary-tree-generator",
     "version": "0.1.0",
     "description": "",
+    "homepage": "https://rarula.github.io/BinaryTreeGenerator/",
     "main": "index.js",
     "scripts": {
         "start": "webpack-dev-server --mode development",
@@ -9,7 +10,9 @@
         "build": "webpack --mode development",
         "build-prod": "webpack --mode production",
         "typegen": "tcm src",
-        "typegen-watch": "tcm --watch src"
+        "typegen-watch": "tcm --watch src",
+        "predeploy": "npm run build-prod",
+        "deploy": "gh-pages -d build"
     },
     "author": "rarula",
     "license": "MIT",
@@ -23,6 +26,7 @@
         "dprint": "^0.35.3",
         "eslint": "^8.36.0",
         "eslint-plugin-react": "^7.32.2",
+        "gh-pages": "^5.0.0",
         "html-webpack-plugin": "^5.5.0",
         "mini-css-extract-plugin": "^2.7.5",
         "ts-loader": "^9.4.2",
