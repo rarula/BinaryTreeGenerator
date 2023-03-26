@@ -28,3 +28,7 @@
     background-color: rgb(51, 54, 58);
     border-color: rgb(128, 128, 128);
 }
+
+.error {
+    color: rgb(218, 59, 59);
+}

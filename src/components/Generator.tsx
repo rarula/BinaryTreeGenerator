@@ -8,7 +8,7 @@ import GeneratorSettings from './GeneratorSettings';
 import Header from './Header';
 
 const Generator = (): JSX.Element => {
-    const { register, getValues } = useForm<Settings>({
+    const { register, handleSubmit, getValues, formState: { errors } } = useForm<Settings>({
         defaultValues: {
             min: 0,
             max: 0,
@@ -19,6 +19,7 @@ const Generator = (): JSX.Element => {
             commands: '',
             useImpDoc: false,
         },
+        mode: 'onChange',
     });
 
     return (
@@ -26,8 +27,8 @@ const Generator = (): JSX.Element => {
             <Header />
             <div className={styles['area']}>
                 <div className={styles['contents']}>
-                    <GeneratorSettings register={register} />
-                    <DownloadButton getValues={getValues} />
+                    <GeneratorSettings register={register} errors={errors} />
+                    <DownloadButton handleSubmit={handleSubmit} getValues={getValues} />
                 </div>
             </div>
         </>

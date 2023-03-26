@@ -1,7 +1,7 @@
 import JSZip from 'jszip';
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import { UseFormGetValues } from 'react-hook-form';
+import { UseFormGetValues, UseFormHandleSubmit } from 'react-hook-form';
 
 import { createDatapack } from '../generator/datapack';
 import styles from '../styles/DownloadButton.module.css';
@@ -10,9 +10,10 @@ import { trimFolder, trimNamespace } from '../utils/resourcePath';
 
 type Props = {
     getValues: UseFormGetValues<Settings>;
+    handleSubmit: UseFormHandleSubmit<Settings>;
 };
 
-const DownloadButton = ({ getValues }: Props): JSX.Element => {
+const DownloadButton = ({ getValues, handleSubmit }: Props): JSX.Element => {
     const getCommands = (): string[] => {
         const commands = getValues('commands').split('\n');
         const filtered = commands
@@ -65,7 +66,7 @@ const DownloadButton = ({ getValues }: Props): JSX.Element => {
 
     return (
         <div className={styles['button-pos']}>
-            <Button className={styles['button']} variant='outline-secondary' onClick={onClick}>
+            <Button className={styles['button']} variant='outline-secondary' onClick={handleSubmit(onClick)}>
                 Download
             </Button>
         </div>
