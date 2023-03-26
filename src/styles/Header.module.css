@@ -1,4 +1,7 @@
 .header {
+    display: flex;
+    justify-content: center;
+
     position: fixed;
     top: 0;
     left: 0;
@@ -14,7 +17,17 @@
 }
 
 .title {
-    text-align: center;
-
     font-weight: bold;
+}
+
+.github-link {
+    position: absolute;
+    top: calc((100% - 32px) / 2);
+    right: 25px;
+
+    fill: rgb(156, 156, 156);
+}
+
+.github-link:hover {
+    fill: rgb(201, 201, 201);
 }
