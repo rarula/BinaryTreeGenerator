@@ -27,7 +27,7 @@ const Generator = (): JSX.Element => {
             <Header />
             <div className={styles['area']}>
                 <div className={styles['contents']}>
-                    <GeneratorSettings register={register} errors={errors} />
+                    <GeneratorSettings register={register} getValues={getValues} errors={errors} />
                     <DownloadButton handleSubmit={handleSubmit} getValues={getValues} />
                 </div>
             </div>

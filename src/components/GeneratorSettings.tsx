@@ -1,16 +1,17 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
-import { FieldErrors, UseFormRegister } from 'react-hook-form';
+import { FieldErrors, UseFormGetValues, UseFormRegister } from 'react-hook-form';
 
 import styles from '../styles/GeneratorSettings.module.css';
 import { Settings } from '../types/Settings';
 
 type Props = {
     register: UseFormRegister<Settings>;
+    getValues: UseFormGetValues<Settings>;
     errors: FieldErrors<Settings>;
 };
 
-const GeneratorSettings = ({ register, errors }: Props): JSX.Element => {
+const GeneratorSettings = ({ register, getValues, errors }: Props): JSX.Element => {
     return (
         <Form className={styles['settings']}>
             <div className={styles['settings-column']}>
@@ -18,7 +19,14 @@ const GeneratorSettings = ({ register, errors }: Props): JSX.Element => {
                     <Form.Group className={styles['item']}>
                         <Form.Label>Min</Form.Label>
                         <Form.Control className={styles['input']} type='number' {...register('min', {
-                            required: 'Please enter a valid number',
+                            valueAsNumber: true,
+                            required: {
+                                value: true,
+                                message: 'Please enter a valid number',
+                            },
+                            validate: (value: number) => {
+                                return getValues('max') > value || 'Please enter a valid number';
+                            },
                         })} />
                         <Form.Text className={styles['error']}>
                             {errors.min?.message}
@@ -27,7 +35,14 @@ const GeneratorSettings = ({ register, errors }: Props): JSX.Element => {
                     <Form.Group className={styles['item']}>
                         <Form.Label>Max</Form.Label>
                         <Form.Control className={styles['input']} type='number' {...register('max', {
-                            required: 'Please enter a valid number',
+                            valueAsNumber: true,
+                            required: {
+                                value: true,
+                                message: 'Please enter a valid number',
+                            },
+                            validate: (value: number) => {
+                                return value > getValues('min') || 'Please enter a valid number';
+                            },
                         })} />
                         <Form.Text className={styles['error']}>
                             {errors.max?.message}
@@ -39,7 +54,10 @@ const GeneratorSettings = ({ register, errors }: Props): JSX.Element => {
                     <Form.Group className={styles['item']}>
                         <Form.Label>Score holder</Form.Label>
                         <Form.Control className={styles['input']} type='text' {...register('scoreHolder', {
-                            required: 'Please enter a valid value',
+                            required: {
+                                value: true,
+                                message: 'Please enter a valid value',
+                            },
                         })} />
                         <Form.Text className={styles['error']}>
                             {errors.scoreHolder?.message}
@@ -48,7 +66,10 @@ const GeneratorSettings = ({ register, errors }: Props): JSX.Element => {
                     <Form.Group className={styles['item']}>
                         <Form.Label>Objective</Form.Label>
                         <Form.Control className={styles['input']} type='text' {...register('objective', {
-                            required: 'Please enter a valid value',
+                            required: {
+                                value: true,
+                                message: 'Please enter a valid value',
+                            },
                         })} />
                         <Form.Text className={styles['error']}>
                             {errors.objective?.message}
@@ -73,7 +94,10 @@ const GeneratorSettings = ({ register, errors }: Props): JSX.Element => {
                     <Form.Group className={styles['item']}>
                         <Form.Label>Output commands</Form.Label>
                         <Form.Control className={styles['input']} as='textarea' {...register('commands', {
-                            required: 'Please enter a valid value',
+                            required: {
+                                value: true,
+                                message: 'Please enter a valid value',
+                            },
                         })} />
                         <Form.Text>
                             <span className={styles['bold']}>*i</span> will be converted to scoreboard value <br />
