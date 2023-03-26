@@ -12,7 +12,7 @@
         "typegen": "tcm src",
         "typegen-watch": "tcm --watch src",
         "predeploy": "npm run build-prod",
-        "deploy": "gh-pages -d build"
+        "deploy": "gh-pages -d dist"
     },
     "author": "rarula",
     "license": "MIT",
