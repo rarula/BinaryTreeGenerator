@@ -32,3 +32,7 @@
 .error {
     color: rgb(218, 59, 59);
 }
+
+.bold {
+    font-weight: bold;
+}

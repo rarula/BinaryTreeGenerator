@@ -75,6 +75,9 @@ const GeneratorSettings = ({ register, errors }: Props): JSX.Element => {
                         <Form.Control className={styles['input']} as='textarea' {...register('commands', {
                             required: 'Please enter a valid value',
                         })} />
+                        <Form.Text>
+                            <span className={styles['bold']}>*i</span> will be converted to scoreboard value <br />
+                        </Form.Text>
                         <Form.Text className={styles['error']}>
                             {errors.commands?.message}
                         </Form.Text>

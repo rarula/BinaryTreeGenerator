@@ -45,10 +45,10 @@ function generateBinaryTree(values: number[]): BinaryTree {
 
 function getCommand(commands: string | string[], replaceValue: string): string {
     if (typeof commands === 'string') {
-        return commands.replaceAll('$i', replaceValue);
+        return commands.replaceAll('*i', replaceValue);
     } else {
         return commands.map((command) => {
-            return command.replaceAll('$i', replaceValue);
+            return command.replaceAll('*i', replaceValue);
         }).join('\n');
     }
 }
