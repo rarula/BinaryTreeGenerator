@@ -4,7 +4,8 @@
         "indentWidth": 4,
         "useTabs": false,
         "semiColons": "always",
-        "quoteStyle": "alwaysSingle"
+        "quoteStyle": "alwaysSingle",
+        "jsxAttributes.preferHanging": true
     },
     "json": {
         "indentWidth": 4,
