@@ -1,8 +1,8 @@
 import JSZip from 'jszip';
 import React from 'react';
+import Button from 'react-bootstrap/Button';
 import { UseFormGetValues } from 'react-hook-form';
 
-import { Button } from 'react-bootstrap';
 import { createDatapack } from '../generator/datapack';
 import styles from '../styles/DownloadButton.module.css';
 import { FixedSettings, Settings } from '../types/Settings';
@@ -38,6 +38,8 @@ const DownloadButton = ({ getValues }: Props): JSX.Element => {
             path: trimFolder(values.path),
 
             commands: getCommands(),
+
+            useImpDoc: values.useImpDoc,
         };
     };
 

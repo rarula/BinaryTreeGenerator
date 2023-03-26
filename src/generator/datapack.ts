@@ -12,6 +12,14 @@ const packMcmeta = {
     },
 };
 
+type File = {
+    tree: BinaryTree;
+    caller?: {
+        folderNum: number;
+        fileNum: number;
+    };
+};
+
 type BinaryTree = {
     values: number[];
     low?: BinaryTree;
@@ -46,31 +54,44 @@ function getCommand(commands: string | string[], replaceValue: string): string {
 }
 
 export function createDatapack(zip: JSZip, settings: FixedSettings): void {
-    const zipFunc = zip.folder(`data/${settings.namespace}/functions/${settings.path}`);
-    if (!zipFunc) return;
+    const functions = zip.folder(`data/${settings.namespace}/functions/${settings.path}`);
+    if (!functions) return;
 
-    const binaryTree = generateBinaryTree(range(settings.min, settings.max));
     const isSingleCommand = settings.commands.length === 1;
 
-    let treeList: BinaryTree[] = [];
-    let nextTreeList: BinaryTree[] = [];
+    const binaryTree = generateBinaryTree(range(settings.min, settings.max));
+    let nextFolder: File[] = [];
+    let folder: File[] = [];
 
-    treeList.push(binaryTree);
+    folder.push({
+        tree: binaryTree,
+    });
 
-    for (let i = 0; 0 < treeList.length; i++) {
-        const folderName = `b-${i}`;
+    for (let folderNum = 0; 0 < folder.length; folderNum++) {
         let nextFileNum = 0;
 
-        for (let j = 0; j < treeList.length; j++) {
-            const fileName = `${j}.mcfunction`;
-            const currentTree = treeList[j];
+        for (let fileNum = 0; fileNum < folder.length; fileNum++) {
+            const file = folder[fileNum];
 
-            if (currentTree.low && currentTree.high) {
+            if (file.tree.low && file.tree.high) {
                 const trees: BinaryTree[] = [
-                    currentTree.low,
-                    currentTree.high,
+                    file.tree.low,
+                    file.tree.high,
                 ];
+
                 let text = '';
+                if (settings.useImpDoc) {
+                    text += `#> ${join(settings.namespace, settings.path, `b-${folderNum}`, fileNum.toString())}`;
+                    text += '\n';
+
+                    if (file.caller) {
+                        text += `# @within function ${join(settings.namespace, settings.path, `b-${file.caller.folderNum}`, file.caller.fileNum.toString())}`;
+                    } else {
+                        text += `# @within * ${join(settings.namespace, settings.path, '**')}`;
+                    }
+
+                    text += '\n\n';
+                }
 
                 for (const tree of trees) {
                     text += `execute if score ${settings.scoreHolder} ${settings.objective} matches `;
@@ -85,25 +106,46 @@ export function createDatapack(zip: JSZip, settings: FixedSettings): void {
                             const path = join(settings.namespace, settings.path, 'b-end', `${value}`);
                             text += `${value} run function ${path}`;
 
-                            const text2 = getCommand(settings.commands, value.toString());
-                            zipFunc.file(`b-end/${value}.mcfunction`, text2);
+                            let text2 = '';
+                            if (settings.useImpDoc) {
+                                text2 += `#> ${join(settings.namespace, settings.path, 'b-end', value.toString())}`;
+                                text2 += '\n';
+
+                                text2 += `# @within function ${join(settings.namespace, settings.path, `b-${folderNum}`, fileNum.toString())}`;
+                                text2 += '\n\n';
+                            }
+
+                            // 複数のコマンドを出力するファイルを作成
+                            text2 += getCommand(settings.commands, value.toString());
+                            functions.file(`b-end/${value}.mcfunction`, text2);
                         }
                     } else {
                         const min = tree.values.at(0);
                         const max = tree.values.at(-1);
-                        const path = join(settings.namespace, settings.path, `b-${i + 1}`, `${nextFileNum}`);
+                        const path = join(settings.namespace, settings.path, `b-${folderNum + 1}`, `${nextFileNum}`);
                         text += `${min}..${max} run function ${path}`;
 
-                        nextTreeList.push(tree);
+                        const nextFile: File = {
+                            tree: tree,
+                            caller: {
+                                folderNum: folderNum,
+                                fileNum: fileNum,
+                            },
+                        };
+
+                        nextFolder.push(nextFile);
                         nextFileNum++;
                     }
+
                     text += '\n';
                 }
-                zipFunc.file(`${folderName}/${fileName}`, text);
+
+                functions.file(`b-${folderNum}/${fileNum}.mcfunction`, text);
             }
         }
-        treeList = nextTreeList;
-        nextTreeList = [];
+
+        folder = nextFolder;
+        nextFolder = [];
     }
 
     zip.file('pack.mcmeta', JSON.stringify(packMcmeta, null, 4));

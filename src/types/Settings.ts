@@ -9,6 +9,8 @@ export type Settings = {
     path: string;
 
     commands: string;
+
+    useImpDoc: boolean;
 };
 
 export type FixedSettings = {
@@ -22,4 +24,6 @@ export type FixedSettings = {
     path: string;
 
     commands: string[];
+
+    useImpDoc: boolean;
 };

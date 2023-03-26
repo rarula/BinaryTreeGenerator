@@ -17,6 +17,7 @@ const Generator = (): JSX.Element => {
             namespace: '',
             path: '',
             commands: '',
+            useImpDoc: false,
         },
     });
 

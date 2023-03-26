@@ -54,6 +54,11 @@ const GeneratorSettings = ({ register }: Props): JSX.Element => {
                         <Form.Control className={styles['input']} as='textarea' {...register('commands')} />
                     </Form.Group>
                 </div>
+                <div className={styles['item-group']}>
+                    <Form.Group className={styles['item']}>
+                        <Form.Check type='switch' label='Use IMP-Doc' {...register('useImpDoc')} />
+                    </Form.Group>
+                </div>
             </div>
         </Form>
     );
